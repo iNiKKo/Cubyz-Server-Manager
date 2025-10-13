@@ -3,11 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <title>Ashframe Player Count</title>
+  <style>
+    /* Maintenance message styling */
+    #maintenance {
+      color: red;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
   <h1>Ashframe Server Player Count</h1>
   <div>Players online: <span id="playercount">Loading...</span></div>
-  <h2>Players: </h1>
+  <h2>Players: </h2>
+  <div id="playernames"></div>
+  <div id="maintenance" style="display: none;">The server is currently under maintenance. Please try again later.</div>
+
   <script>
     async function updatePlayerCount() {
       try {
@@ -16,13 +28,29 @@
             'ngrok-skip-browser-warning': 'true'
           }
         });
+        if (!res.ok) {
+          throw new Error('Service unavailable');
+        }
         const data = await res.json();
         document.getElementById('playercount').textContent = data.players;
+
+        // Assuming 'data.players' is an array of player names
+        const playerNames = data.players.map(player => stripColorCodes(player));
+        document.getElementById('playernames').innerHTML = playerNames.join('<br>');
+        document.getElementById('maintenance').style.display = 'none'; // Hide maintenance message
       } catch (err) {
         console.error("Fetch error:", err);
         document.getElementById('playercount').textContent = 'Error';
+        document.getElementById('playernames').innerHTML = '';
+        document.getElementById('maintenance').style.display = 'block'; // Show maintenance message
       }
     }
+
+    function stripColorCodes(playerName) {
+      // Regex to remove Minecraft-style color codes
+      return playerName.replace(/§[0-9A-FK-OR]/gi, '');
+    }
+
     updatePlayerCount();
     setInterval(updatePlayerCount, 10000);
   </script>
