@@ -10,11 +10,11 @@ CORS(app)
 log_path = "YOUR/FULL/PATH/latest.log"
 
 connected_players = set()
+record_count = 0
 
 # Regex to detect joins and leaves from your log format
-join_regex = re.compile(r'\[info\]: User (.+?) joined')
-leave_regex = re.compile(r'\[info\]: Chat: (.+?) left')
-
+join_regex = re.compile(r'^\[info\]: Chat: (.+?) joined$')
+leave_regex = re.compile(r'^\[info\]: Chat: (.+?) left$')
 
 def clean_name(name):
     # Remove § color codes (if any)
@@ -64,6 +64,7 @@ def follow_log():
                     if player not in connected_players:
                         connected_players.add(player)
                         print(f"JOIN: {player}")
+                        update_record_count()
 
                 leave_match = leave_regex.search(line)
                 if leave_match:
@@ -83,7 +84,7 @@ def index():
 
 @app.route("/playercount")
 def player_count():
-    return jsonify(players=len(connected_players))
+    return jsonify(players=len(connected_players), record=record_count)
 
 @app.route("/playerlist")
 def player_list():
@@ -92,8 +93,27 @@ def player_list():
 def run_flask():
     app.run(host="0.0.0.0", port=5000)
 
+def update_record_count():
+    global record_count
+    current_count = len(connected_players)
+    if current_count > record_count:
+        record_count = current_count
+        try:
+            with open("record.txt", "w", encoding="utf-8") as f:
+                f.write(str(record_count))
+        except FileNotFoundError:
+            with open("record.txt", "x", encoding="utf-8") as f:
+                f.write(str(record_count))
+
 if __name__ == "__main__":
+    try:
+        with open("record.txt", "r", encoding="utf-8") as f:
+         record_count = int(f.read())
+    except FileNotFoundError:
+        with open("record.txt", "x", encoding="utf-8") as f:
+            f.write(str(record_count))
     connected_players = build_initial_player_list()
+    update_record_count()
     print(f"Initial players loaded: {connected_players}")
     Thread(target=follow_log, daemon=True).start()
     run_flask()

@@ -86,16 +86,6 @@
   </div>
 
   <script>
-    function updateRecord(current) {
-      const stored = localStorage.getItem('recordPlayerCount');
-      const record = stored ? parseInt(stored) : 0;
-      if (current > record) {
-        localStorage.setItem('recordPlayerCount', current);
-        return current;
-      }
-      return record;
-    }
-
     async function updatePlayerCount() {
       try {
         const resCount = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playercount', {
@@ -103,9 +93,7 @@
         });
         const dataCount = await resCount.json();
         document.getElementById('playercount').textContent = dataCount.players;
-
-        const record = updateRecord(dataCount.players);
-        document.getElementById('recordcount').textContent = record;
+        document.getElementById('recordcount').textContent = dataCount.record;
 
         const resList = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playerlist', {
           headers: { 'ngrok-skip-browser-warning': 'true' }
