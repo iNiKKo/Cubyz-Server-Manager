@@ -20,6 +20,7 @@ Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 Prerequisites
 - Ngrock (Port Forwarding to 5000)
 - Python3
+- Domain Name preferebly Cloudflare based (should work with Public IP but NOT reccomended and no tutorial)
 
 1. **Port forward** TCP port **5000** and your game’s UDP port in your router  
 2. **Download** the Python script from GitHub  
