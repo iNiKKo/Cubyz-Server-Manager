@@ -1,17 +1,28 @@
-Website based Cubyz Player count & Player Names (BETA)
+# 🚀 Website-based **Cubyz Player Count & Player Names** (BETA)
 
-How it works 
-Python script reads your server logs to see if anyone joined or left
-it also removes the symbols and colour codes
+---
 
-Finished Product here https://status.ashframe.net/
+## ⚙️ How it works  
+The **Python script** reads your server logs to track who joined or left the game.  
+It also **removes symbols and color codes** from player names to keep it clean and readable.
 
+---
 
-Tutorial Under Developement
+## 🎉 Finished Product  
+Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 
-THIS TUTORIAL IS DEBIAN LINUX BASED
-1. Port forward 5000 tcp & Game port UDP
-2. Download the .Py Script from Github
-3. import the .Py Script into the Logs folder inside Cubyz
-4. Edit the .Py line 10, add your path to the Latest.log
-5.
+---
+
+## 📚 Tutorial *(Under Development)*
+
+> **Note:** This tutorial is based on **Debian Linux**
+
+1. **Port forward** TCP port **5000** and your game’s UDP port  
+2. **Download** the Python script from GitHub  
+3. **Place** the Python script inside the **Logs folder** of your Cubyz server  
+4. **Edit** the Python script:  
+   - On **line 10**, update the path to your `latest.log` file  
+
+---
+
+*More coming soon!*
