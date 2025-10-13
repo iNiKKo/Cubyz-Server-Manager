@@ -27,7 +27,9 @@ Prerequisites
 3. **Place** the Python script inside the **Logs folder** of your Cubyz server  
 4. **Edit** the Python script:  
    - On **line 10**, update the path to your `latest.log` file  
-5. Save & test, [ python3 player_count_server.py ]
+5. Save & Run
+6. Follow these Instructions https://ngrok.com/download/linux?tab=install (egister and then ngrok http 5000)
+7. Take the new HTTPS address from Ngrock and Download Index.html where you need to change Address at line 17 & 24
 ---
 
 *More coming soon!*
