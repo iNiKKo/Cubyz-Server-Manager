@@ -21,13 +21,12 @@ Prerequisites
 - Ngrock (Port Forwarding to 5000)
 - Python3
 
-
 1. **Port forward** TCP port **5000** and your game’s UDP port in your router  
 2. **Download** the Python script from GitHub  
 3. **Place** the Python script inside the **Logs folder** of your Cubyz server  
 4. **Edit** the Python script:  
    - On **line 10**, update the path to your `latest.log` file  
-
+5. Save & test, [ python3 player_count_server.py ]
 ---
 
 *More coming soon!*
