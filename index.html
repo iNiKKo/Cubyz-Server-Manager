@@ -7,22 +7,38 @@
 <body>
   <h1>Ashframe Server Player Count</h1>
   <div>Players online: <span id="playercount">Loading...</span></div>
-  <h2>Players: </h1>
+  <h2>Players:</h2>
+  <div id="playernames">Loading...</div>
+
   <script>
     async function updatePlayerCount() {
       try {
-        const res = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playercount', {
-          headers: {
-            'ngrok-skip-browser-warning': 'true'
-          }
+        // Fetch player count
+        const resCount = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playercount', {
+          headers: { 'ngrok-skip-browser-warning': 'true' }
         });
-        const data = await res.json();
-        document.getElementById('playercount').textContent = data.players;
+        const dataCount = await resCount.json();
+        document.getElementById('playercount').textContent = dataCount.players;
+
+        // Fetch player list
+        const resList = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playerlist', {
+          headers: { 'ngrok-skip-browser-warning': 'true' }
+        });
+        const dataList = await resList.json();
+
+        // dataList.players is a list of player names (already cleaned in backend)
+        if (dataList.players.length === 0) {
+          document.getElementById('playernames').textContent = 'No players online';
+        } else {
+          document.getElementById('playernames').innerHTML = dataList.players.join('<br>');
+        }
       } catch (err) {
         console.error("Fetch error:", err);
         document.getElementById('playercount').textContent = 'Error';
+        document.getElementById('playernames').textContent = 'Error fetching player list';
       }
     }
+
     updatePlayerCount();
     setInterval(updatePlayerCount, 10000);
   </script>
