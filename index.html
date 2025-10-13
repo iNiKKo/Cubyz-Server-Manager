@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8" /><title>Cubyz Player Count</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <title>Cubyz Player Count</title>
+</head>
 <body>
-<h1>Cubyz Server Player Count</h1>
-<div>Players online: <span id="playercount">Loading...</span></div>
-<script>
-async function updatePlayerCount() {
-  try {
-    const res = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playercount');
-    const data = await res.json();
-    document.getElementById('playercount').textContent = data.players;
-  } catch {
-    document.getElementById('playercount').textContent = 'Error';
-  }
-}
-updatePlayerCount();
-setInterval(updatePlayerCount, 10000);
-</script>
+  <h1>Cubyz Server Player Count</h1>
+  <div>Players online: <span id="playercount">Loading...</span></div>
+
+  <script>
+    async function updatePlayerCount() {
+      try {
+        const res = await fetch('https://semiacademic-loni-unseducibly.ngrok-free.dev/playercount', {
+          headers: {
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        const data = await res.json();
+        document.getElementById('playercount').textContent = data.players;
+      } catch (err) {
+        console.error("Fetch error:", err);
+        document.getElementById('playercount').textContent = 'Error';
+      }
+    }
+    updatePlayerCount();
+    setInterval(updatePlayerCount, 10000);
+  </script>
 </body>
 </html>
