@@ -17,7 +17,12 @@ Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 
 > **Note:** This tutorial is based on **Debian Linux**
 
-1. **Port forward** TCP port **5000** and your game’s UDP port  
+Prerequisites
+- Ngrock (Port Forwarding to 5000)
+- Python3
+
+
+1. **Port forward** TCP port **5000** and your game’s UDP port in your router  
 2. **Download** the Python script from GitHub  
 3. **Place** the Python script inside the **Logs folder** of your Cubyz server  
 4. **Edit** the Python script:  
