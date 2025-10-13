@@ -7,7 +7,7 @@
 <script>
 async function updatePlayerCount() {
   try {
-    const res = await fetch('http://YOUR_DOMAIN_OR_IP:5000/playercount');
+    const res = await fetch('http://86.186.154.214:5000/playercount');
     const data = await res.json();
     document.getElementById('playercount').textContent = data.players;
   } catch {
