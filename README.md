@@ -27,11 +27,31 @@ Prerequisites
 3. **Place** the Python script inside the **Logs folder** of your Cubyz server  
 4. **Edit** the Python script:  
    - On **line 10**, update the path to your `latest.log` file  
-5. Save & Run
-6. Follow these Instructions https://ngrok.com/download/linux?tab=install (egister and then ngrok http 5000)
-7. Take the new HTTPS address from Ngrock and Download Index.html where you need to change Address at line 17 & 24
-8. Create a new Github Repo, uplaod the Index.html go into Settings / Pages and set branch to main or root
-9. After a minute you should be able to access your website https://PROFILE_NAME.github.io/YOUR-REPO-HERE/
+5. **Save** the changes and **run** the Python script.
+
+6. **Set up ngrok:**
+   - Follow the installation instructions for Linux: [https://ngrok.com/download/linux?tab=install](https://ngrok.com/download/linux?tab=install)
+   - Register for an ngrok account if you haven't already.
+   - Start a tunnel by running:
+     ```bash
+     ngrok http 5000
+     ```
+   - Copy the HTTPS URL provided by ngrok.
+
+7. **Download** the `index.html` file and update it:
+   - Open the file in any text editor.
+   - Replace the ngrok URL on **line 17** and **line 24** with your newly generated HTTPS URL.
+   - Save the file.
+
+8. **Create a new GitHub repository:**
+   - Upload the updated `index.html` file to your repo.
+   - Navigate to **Settings > Pages**.
+   - Set the source to the `main` branch and the folder to `/ (root)`.
+
+9. **Access your website:**
+   - After about a minute, your site should be live at:
+     ```
+     https://<YOUR-GITHUB-USERNAME>.github.io/<YOUR-REPO-NAME>/
 
 ---
 
