@@ -13,43 +13,45 @@ Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 
 ---
 
-## 📚 Tutorial *(Under Development)*
+## 📚 Tutorial
 
 > **Note:** This tutorial is based on **Debian Linux**
 
-Prerequisites
-- Python
+## 🔧 Prerequisites
+- Python 3
+- `flask-cors` module
 
-1. **Port forward** TCP port **5000** and your game’s UDP port in your router  
-2. **Download** the Python script from GitHub  
-3. **Place** the Python script inside the **Logs folder** of your Cubyz server  
-4. **Edit** the Python script:  
-   - On **line 10**, update the path to your `latest.log` file  
-5. **Save** the changes and **run** the Python script.
+Install `flask-cors` with:
+```bash
+pip install flask-cors
+```
 
-6. **Set up ngrok:**
-   - Follow the installation instructions for Linux: [https://ngrok.com/download/linux?tab=install](https://ngrok.com/download/linux?tab=install)
-   - Register for an ngrok account if you haven't already.
-   - Start a tunnel by running:
-     ```bash
-     ngrok http 5000
+---
+
+## 📥 Setup Instructions
+
+1. **Download the script**  
+   [multi_player_server_count.py](https://github.com/iNiKKo/cubyz-ashframe-status/blob/main/multi_player_server_count.py)
+
+2. **Place the script in your server’s log folder**  
+   This should be the folder that contains `latest.log`.
+
+3. **Edit the script**
+   - Line `9`: Set the path to your `latest.log`  
+     Example:
+     ```python
+     log_path = "/home/youruser/server/logs/latest.log"
      ```
-   - Copy the HTTPS URL provided by ngrok.
-
-7. **Download** the `index.html` file and update it:
-   - Open the file in any text editor.
-   - Replace the ngrok URL on **line 17** and **line 24** with your newly generated HTTPS URL.
-   - Save the file.
-
-8. **Create a new GitHub repository:**
-   - Upload the updated `index.html` file to your repo.
-   - Navigate to **Settings > Pages**.
-   - Set the source to the `main` branch and the folder to `/ (root)`.
-
-9. **Access your website:**
-   - After about a minute, your site should be live at:
+   - Line `68`: Set a unique server ID  
+     Example:
+     ```python
+     SERVER_ID = "Your_SEVER-Name"
      ```
-     https://<YOUR-GITHUB-USERNAME>.github.io/<YOUR-REPO-NAME>/
+
+4. **Run the script**
+```bash
+python3 multi_player_server_count.py
+```
 
 ---
 
