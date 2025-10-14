@@ -3,9 +3,10 @@
 ---
 
 ## ⚙️ How it works  
-The **Python script** reads your server logs to track who joined or left the game.  
+The **Python script** reads your server logs to track who joined/left or died.
 It also **removes symbols and color codes** from player names to keep it clean and readable.
 
+> **Note:** some names may show up weird due to the limitations of log reading.
 ---
 
 ## 🎉 Finished Product  
