@@ -6,15 +6,16 @@ from threading import Thread
 import requests
 
 # === CHANGE THESE ===
-log_path = "/home/minipc/Desktop/Cubyz/logs/latest.log" # to your log file
-SERVER_ID = "ashframe"  # your server name
-CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update" # don't touch this
+log_path = "/home/minipc/Desktop/Cubyz/logs/latest.log" # YOUR LOG PATH
+SERVER_ID = "ashframe"  # YOUR SERVER NAME
+SCRIPT_VERSION = "1.0" # DON'T TOUCH
+CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update" # DON'T TOUCH
 # ====================
 
 connected_players = set()
-death_count = 0  
+death_count = 0  # Count fall deaths
 
-
+# Regex patterns
 join_regex = re.compile(r'\[info\]: User (.+?) joined')
 leave_regex = re.compile(r'\[info\]: Chat: (.+?) left')
 death_regex = re.compile(r'\[info\]: Chat: .*? died of fall damage')
@@ -48,7 +49,7 @@ def follow_log():
     global connected_players, death_count
     try:
         with open(log_path, "r", encoding="utf-8") as f:
-            f.seek(0, 2)  
+            f.seek(0, 2)
             while True:
                 line = f.readline()
                 if not line:
@@ -69,7 +70,6 @@ def follow_log():
                         connected_players.discard(player)
                         print(f"LEAVE: {player}")
 
-                
                 if death_regex.search(line):
                     death_count += 1
                     print(f"DEATH DETECTED | Total deaths: {death_count}")
@@ -80,15 +80,20 @@ def follow_log():
         print(f"Error reading log: {e}")
 
 def send_update():
+    global death_count
     data = {
         "server_id": SERVER_ID,
         "player_count": len(connected_players),
         "players": list(connected_players),
-        "death_count": death_count  
+        "new_deaths": death_count,
+        "status": "online",
+        "script_version": SCRIPT_VERSION
     }
+
     try:
         requests.post(CENTRAL_URL, json=data)
         print(f"Sent update: {data}")
+        death_count = 0
     except Exception as e:
         print(f"Failed to send update: {e}")
 
@@ -102,6 +107,7 @@ if __name__ == "__main__":
     print(f"Initial players loaded: {connected_players}")
     Thread(target=follow_log, daemon=True).start()
     Thread(target=periodic_send, daemon=True).start()
+    
     while True:
         time.sleep(1)
 
