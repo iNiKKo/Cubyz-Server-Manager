@@ -1,55 +1,53 @@
-from flask_cors import CORS
 import time
 import re
-from flask import Flask, jsonify
 from threading import Thread
 import requests
 
-# === CHANGE THESE ===
-log_path = "/home/minipc/Desktop/Cubyz/logs/latest.log" # YOUR LOG PATH
+# === CONFIG ===
+LOG_PATH = "/home/minipc/Desktop/Cubyz/logs/latest.log"  # YOUR LOG PATH
 SERVER_ID = "ashframe"  # YOUR SERVER NAME
-SCRIPT_VERSION = "1.0" # DON'T TOUCH
-CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update" # DON'T TOUCH
-# ====================
+SCRIPT_VERSION = "1.0" # DONT TOUCH ME
+CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update" # DONT TOUCH ME
+SEND_INTERVAL = 10  # seconds
+# ==============
 
 connected_players = set()
-death_count = 0  # Count fall deaths
+death_count = 0
 
-# Regex patterns
+# Regex to detect join, leave, death lines
 join_regex = re.compile(r'\[info\]: User (.+?) joined')
 leave_regex = re.compile(r'\[info\]: Chat: (.+?) left')
 death_regex = re.compile(r'\[info\]: Chat: .*? died of fall damage')
 
 def clean_name(name):
-    cleaned = re.sub(r'§[^ ]*', '', name)
-    cleaned = re.sub(r'#([0-9a-fA-F]{6})', '', cleaned)
-    cleaned = re.sub(r'[^\w\s]', '', cleaned)
-    return cleaned.strip()
+    # Clean player names (remove colors and symbols)
+    name = re.sub(r'§.', '', name)
+    name = re.sub(r'#([0-9a-fA-F]{6})', '', name)
+    name = re.sub(r'[^\w\s]', '', name)
+    return name.strip()
 
 def build_initial_player_list():
     players = set()
     try:
-        with open(log_path, "r", encoding="utf-8") as f:
+        with open(LOG_PATH, "r", encoding="utf-8") as f:
             for line in f:
                 join_match = join_regex.search(line)
                 if join_match:
-                    name = clean_name(join_match.group(1))
-                    players.add(name)
+                    players.add(clean_name(join_match.group(1)))
                 leave_match = leave_regex.search(line)
                 if leave_match:
-                    name = clean_name(leave_match.group(1))
-                    players.discard(name)
+                    players.discard(clean_name(leave_match.group(1)))
     except FileNotFoundError:
-        print(f"Log file not found: {log_path}")
+        print(f"Log file not found: {LOG_PATH}")
     except Exception as e:
-        print(f"Error building initial player list: {e}")
+        print(f"Error reading log for initial player list: {e}")
     return players
 
 def follow_log():
     global connected_players, death_count
     try:
-        with open(log_path, "r", encoding="utf-8") as f:
-            f.seek(0, 2)
+        with open(LOG_PATH, "r", encoding="utf-8") as f:
+            f.seek(0, 2)  # Go to end of file for live tailing
             while True:
                 line = f.readline()
                 if not line:
@@ -75,9 +73,9 @@ def follow_log():
                     print(f"DEATH DETECTED | Total deaths: {death_count}")
 
     except FileNotFoundError:
-        print(f"Log file not found: {log_path}")
+        print(f"Log file not found: {LOG_PATH}")
     except Exception as e:
-        print(f"Error reading log: {e}")
+        print(f"Error following log: {e}")
 
 def send_update():
     global death_count
@@ -89,25 +87,25 @@ def send_update():
         "status": "online",
         "script_version": SCRIPT_VERSION
     }
-
     try:
         requests.post(CENTRAL_URL, json=data)
         print(f"Sent update: {data}")
-        death_count = 0
+        death_count = 0  # Reset deaths after sending
     except Exception as e:
         print(f"Failed to send update: {e}")
 
 def periodic_send():
     while True:
         send_update()
-        time.sleep(10)
+        time.sleep(SEND_INTERVAL)
 
 if __name__ == "__main__":
-    connected_players = build_initial_player_list()
+    connected_players = set()
     print(f"Initial players loaded: {connected_players}")
+
     Thread(target=follow_log, daemon=True).start()
     Thread(target=periodic_send, daemon=True).start()
-    
+
     while True:
         time.sleep(1)
 
