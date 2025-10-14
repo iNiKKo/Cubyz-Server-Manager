@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>Cubyz Server List & Status</title>
+  <title>Cubyz Server Status</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       background-color: #121212;
       color: #f0f0f0;
@@ -22,6 +20,7 @@
       min-height: 100vh;
       padding: 20px;
     }
+
     .container {
       background-color: #1e1e1e;
       padding: 30px;
@@ -30,18 +29,14 @@
       max-width: 600px;
       width: 100%;
     }
-    h1, h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+
     h1 {
       font-size: 2rem;
       color: #82aaff;
+      text-align: center;
+      margin-bottom: 20px;
     }
-    h2 {
-      font-size: 1.2rem;
-      color: #c792ea;
-    }
+
     .server {
       background-color: #2c2c2c;
       padding: 15px;
@@ -50,6 +45,7 @@
       font-family: monospace;
       white-space: pre-wrap;
     }
+
     .loading, .error {
       color: #ff5370;
       font-style: italic;
@@ -60,19 +56,19 @@
 </head>
 <body>
   <div class="container">
-    <h1>Cubyz Server List & Status</h1>
+    <h1>Cubyz Server Status</h1>
     <div id="servers-container" class="loading">Loading...</div>
   </div>
 
   <script>
-    const CENTRAL_API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
+    const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
 
     async function fetchServerData() {
       try {
-        const response = await fetch(CENTRAL_API_URL, {
+        const response = await fetch(API_URL, {
           headers: { 'ngrok-skip-browser-warning': 'true' }
         });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
         const servers = await response.json();
 
@@ -97,6 +93,7 @@
             <h2>${serverId}</h2>
             <p><strong>Players online:</strong> ${info.player_count}</p>
             <p><strong>Players:</strong> ${playersList}</p>
+            <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
           `;
 
           container.appendChild(div);
