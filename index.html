@@ -46,6 +46,14 @@
       white-space: pre-wrap;
     }
 
+    .online {
+      color: #66ff66;
+    }
+
+    .offline {
+      color: #ff5370;
+    }
+
     .loading, .error {
       color: #ff5370;
       font-style: italic;
@@ -81,6 +89,8 @@
           return;
         }
 
+        const now = Date.now() / 1000;
+
         for (const [serverId, info] of Object.entries(servers)) {
           const div = document.createElement('div');
           div.classList.add('server');
@@ -89,10 +99,18 @@
             ? info.players.join(', ')
             : 'No players online';
 
+          const secondsSinceUpdate = now - (info.timestamp || 0);
+          const isOffline = secondsSinceUpdate > 15;
+
           div.innerHTML = `
-            <h2>${serverId}</h2>
-            <p><strong>Players online:</strong> ${info.player_count}</p>
-            <p><strong>Players:</strong> ${playersList}</p>
+            <h2>
+              ${serverId} 
+              <span class="${isOffline ? 'offline' : 'online'}">
+                (${isOffline ? 'Offline' : 'Online'})
+              </span>
+            </h2>
+            <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
+            <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
             <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
           `;
 
