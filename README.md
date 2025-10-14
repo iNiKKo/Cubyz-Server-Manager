@@ -1,4 +1,4 @@
-# 🚀 Website-based **Cubyz Player Count & Player Names** (BETA)
+# 🚀 Website-based **Cubyz Server List** (BETA)
 
 ---
 
