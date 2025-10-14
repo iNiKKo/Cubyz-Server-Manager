@@ -54,6 +54,10 @@
       color: #ff5370;
     }
 
+    .outdated {
+      color: #ffcb6b;
+    }
+
     .loading, .error {
       color: #ff5370;
       font-style: italic;
@@ -70,6 +74,7 @@
 
   <script>
     const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
+    const CURRENT_SCRIPT_VERSION = '1.0';
 
     async function fetchServerData() {
       try {
@@ -79,7 +84,6 @@
         if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
         const servers = await response.json();
-
         const container = document.getElementById('servers-container');
         container.classList.remove('loading', 'error');
         container.innerHTML = '';
@@ -95,20 +99,22 @@
           const div = document.createElement('div');
           div.classList.add('server');
 
-          const playersList = info.players.length > 0
-            ? info.players.join(', ')
-            : 'No players online';
-
           const secondsSinceUpdate = now - (info.timestamp || 0);
           const isOffline = secondsSinceUpdate > 15;
 
+          const playersList = info.players?.length > 0
+            ? info.players.join(', ')
+            : 'No players online';
+
+          const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
+
+          let statusHTML = `<span class="${isOffline ? 'offline' : 'online'}">(${isOffline ? 'Offline' : 'Online'})</span>`;
+          if (!isOffline && isOutdated) {
+            statusHTML += ` <span class="outdated">(Needs Script Update)</span>`;
+          }
+
           div.innerHTML = `
-            <h2>
-              ${serverId} 
-              <span class="${isOffline ? 'offline' : 'online'}">
-                (${isOffline ? 'Offline' : 'Online'})
-              </span>
-            </h2>
+            <h2>${serverId} ${statusHTML}</h2>
             <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
             <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
             <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
