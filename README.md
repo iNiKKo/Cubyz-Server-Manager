@@ -1,4 +1,4 @@
-# 🚀 Website-based **Cubyz Server List** (BETA)
+# 🚀 **Cubyz Server List** (BETA)
 
 ---
 
