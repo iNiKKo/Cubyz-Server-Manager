@@ -22,6 +22,12 @@ Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 - `Python 3`
 - The `requests` module (all others are part of Python's standard library)
 
+```bash
+sudo apt update && sudo apt install -y python3 python3-pip
+```
+```bash
+pip3 install requests
+```
 ---
 
 ## 📥 Setup Instructions
