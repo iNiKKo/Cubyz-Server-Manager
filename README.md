@@ -53,5 +53,5 @@ pip3 install requests
 ```bash
 python3 csm.py
 ```
-> **Note:** You must RUN the script before the server, when rebooting stop the script and run before server.
+> **Note:** You MUST run the script BEFORE the server, when rebooting stop the script and run before server.
 ---
