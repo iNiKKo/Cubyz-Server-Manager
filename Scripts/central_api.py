@@ -21,10 +21,8 @@ def update():
     if not server_id:
         return {"error": "Missing server_id"}, 400
 
-
     previous = server_data.get(server_id, {})
     previous_deaths = previous.get("death_count", 0)
-
 
     new_deaths = data.get("new_deaths", 0)
     total_deaths = previous_deaths + new_deaths
@@ -35,6 +33,7 @@ def update():
         "death_count": total_deaths,
         "status": data.get("status", "online"),
         "script_version": data.get("script_version", "unknown"),
+        "gamemode": data.get("gamemode", "unknown"), 
         "timestamp": time.time()
     }
 
@@ -49,4 +48,3 @@ def servers():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
