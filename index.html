@@ -71,67 +71,67 @@
     <h1>Cubyz Server List</h1>
     <div id="servers-container" class="loading">Loading...</div>
   </div>
+<script>
+  const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
+  const CURRENT_SCRIPT_VERSION = '1.1';
 
-  <script>
-    const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
-    const CURRENT_SCRIPT_VERSION = '1.1';
+  async function fetchServerData() {
+    try {
+      const response = await fetch(API_URL, {
+        headers: { 'ngrok-skip-browser-warning': 'true' }
+      });
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-    async function fetchServerData() {
-      try {
-        const response = await fetch(API_URL, {
-          headers: { 'ngrok-skip-browser-warning': 'true' }
-        });
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+      const servers = await response.json();
+      const container = document.getElementById('servers-container');
+      container.classList.remove('loading', 'error');
+      container.innerHTML = '';
 
-        const servers = await response.json();
-        const container = document.getElementById('servers-container');
-        container.classList.remove('loading', 'error');
-        container.innerHTML = '';
-
-        if (!servers || Object.keys(servers).length === 0) {
-          container.textContent = 'No servers reporting data.';
-          return;
-        }
-
-        const now = Date.now() / 1000;
-
-        for (const [serverId, info] of Object.entries(servers)) {
-          const div = document.createElement('div');
-          div.classList.add('server');
-
-          const secondsSinceUpdate = now - (info.timestamp || 0);
-          const isOffline = secondsSinceUpdate > 15;
-
-          const playersList = info.players?.length > 0
-            ? info.players.join(', ')
-            : 'No players online';
-
-          const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
-
-          let statusHTML = `<span class="${isOffline ? 'offline' : 'online'}">(${isOffline ? 'Offline' : 'Online'})</span>`;
-          if (!isOffline && isOutdated) {
-            statusHTML += ` <span class="outdated">(Needs Script Update)</span>`;
-          }
-
-          div.innerHTML = `
-            <h2>${serverId} ${statusHTML}</h2>
-            <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
-            <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
-            <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
-          `;
-
-          container.appendChild(div);
-        }
-      } catch (err) {
-        const container = document.getElementById('servers-container');
-        container.classList.add('error');
-        container.textContent = 'Error fetching server data.';
-        console.error(err);
+      if (!servers || Object.keys(servers).length === 0) {
+        container.textContent = 'No servers reporting data.';
+        return;
       }
-    }
 
-    fetchServerData();
-    setInterval(fetchServerData, 10000);
-  </script>
+      const now = Date.now() / 1000;
+
+      for (const [serverId, info] of Object.entries(servers)) {
+        const div = document.createElement('div');
+        div.classList.add('server');
+
+        const secondsSinceUpdate = now - (info.timestamp || 0);
+        const isOffline = secondsSinceUpdate > 15;
+
+        const playersList = info.players?.length > 0
+          ? info.players.join(', ')
+          : 'No players online';
+
+        const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
+
+        let statusHTML = `<span class="${isOffline ? 'offline' : 'online'}">(${isOffline ? 'Offline' : 'Online'})</span>`;
+        if (!isOffline && isOutdated) {
+          statusHTML += ` <span class="outdated">(Needs Script Update)</span>`;
+        }
+
+        div.innerHTML = `
+          <h2>${serverId} ${statusHTML}</h2>
+          <p><strong>Gamemode:</strong> ${info.gamemode ?? 'Unknown'}</p> <!-- ✅ NEW LINE -->
+          <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
+          <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
+          <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
+        `;
+
+        container.appendChild(div);
+      }
+    } catch (err) {
+      const container = document.getElementById('servers-container');
+      container.classList.add('error');
+      container.textContent = 'Error fetching server data.';
+      console.error(err);
+    }
+  }
+
+  fetchServerData();
+  setInterval(fetchServerData, 10000);
+</script>
 </body>
 </html>
