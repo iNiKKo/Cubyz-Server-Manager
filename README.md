@@ -1,4 +1,4 @@
-# 🚀 **Cubyz Server List** (BETA)
+# 🚀 **Cubyz Server Manager** (BETA)
 
 ---
 
