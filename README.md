@@ -49,6 +49,11 @@ pip3 install requests
      ```python
      SERVER_ID = "Your_Server_Name"
      ```
+   - Line `10`: Set your server Gamemode  
+     Example:
+     ```python
+     GAMEMODE = "survival"
+     ```
 
 4. **Run the script**
 ```bash
