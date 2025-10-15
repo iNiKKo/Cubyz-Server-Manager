@@ -1,16 +1,10 @@
-# 🚀 **Cubyz Server Manager** (BETA)
+# 🚀 **Cubyz Server Manager**
 
 ---
 
 ## ⚙️ How it works  
 The **Python script** reads your server logs to track who joined/left or died.
 It also **removes symbols and color codes** from player names to keep it clean and readable.
-
-> **Note:** some names may show up weird due to the limitations of log reading.
----
-
-## 🎉 Finished Product  
-Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 
 ---
 
@@ -20,7 +14,7 @@ Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 
 ## 🔧 Prerequisites
 - `Python 3`
-- The `requests` module (all others are part of Python's standard library)
+- `requests`
 
 ```bash
 sudo apt update && sudo apt install -y python3 python3-pip
