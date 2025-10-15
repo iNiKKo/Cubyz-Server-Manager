@@ -8,7 +8,6 @@ CORS(app)
 
 DATA_FILE = "servers.json"
 
-
 try:
     with open(DATA_FILE, "r") as f:
         server_data = json.load(f)
