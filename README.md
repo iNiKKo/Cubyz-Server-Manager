@@ -27,7 +27,7 @@ Check it out here: [https://status.ashframe.net/](https://status.ashframe.net/)
 ## 📥 Setup Instructions
 
 1. **Download the script**  
-   - [🔽 Download csm.py (raw)](https://raw.githubusercontent.com/iNiKKo/cubyz-server-list/main/Scripts/csm.py)
+   - [`csm.py`](https://github.com/iNiKKo/cubyz-server-list/blob/main/Scripts/csm.py)
 
 2. **Place the script in your server’s log folder**  
    This should be the folder that contains `latest.log`.
