@@ -4,22 +4,20 @@ from threading import Thread
 import requests
 import os
 
-# === CONFIG ===
-LOG_PATH = "/home/minipc/Desktop/Cubyz/logs/latest.log"  # Path to your log file - CHANGE ME
-SERVER_ID = "ashframe"  # Server name - CHANGE ME
-GAMEMODE = "survival"  # Set game mode manually: "survival", "creative", etc.
-SCRIPT_VERSION = "1.1"  # Do not change
-CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"  # Do not change
-SEND_INTERVAL = 10  # Seconds between updates
-# ==============
+LOG_PATH = "/home/minipc/Desktop/Cubyz/logs/latest.log"
+SERVER_ID = "ashframe"
+GAMEMODE = "survival"
+SCRIPT_VERSION = "1.1"
+CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"
+SEND_INTERVAL = 10
 
 connected_players = set()
 death_count = 0
 
-# Regex patterns
-join_regex = re.compile(r'\[info\]: User (.+?) joined')
-leave_regex = re.compile(r'\[info\]: Chat:\s+(.+?)\s+left')
-death_regex = re.compile(r'\[info\]: Chat: .*? died of fall damage')
+join_chat_regex = re.compile(r'\[info\]: Chat:\s+(.*?)\s+joined', re.IGNORECASE)
+join_user_regex = re.compile(r'\[info\]: User\s+(.*?)\s+joined using version', re.IGNORECASE)
+leave_regex = re.compile(r'\[info\]: Chat:\s+(.+?)\s+left', re.IGNORECASE)
+death_regex = re.compile(r'\[info\]: Chat: .*? died of fall damage', re.IGNORECASE)
 
 def clean_name(name):
     name = re.sub(r'§#(?:[0-9a-fA-F]{6})', '', name)
@@ -41,10 +39,20 @@ def follow_log():
                     time.sleep(0.1)
                     continue
 
-                if join_regex.search(line):
-                    player_raw = join_regex.search(line).group(1)
+                if join_chat_regex.search(line):
+                    player_raw = join_chat_regex.search(line).group(1)
                     player = clean_name(player_raw)
-                    print(f"JOIN: Raw='{player_raw}' | Cleaned='{player}'")
+                    print(f"JOIN (chat): Raw='{player_raw}' | Cleaned='{player}'")
+                    if player not in connected_players:
+                        connected_players.add(player)
+                        print(f"✅ Player added: {player}")
+                    else:
+                        print(f"⚠️ Player already in connected list: {player}")
+
+                elif join_user_regex.search(line):
+                    player_raw = join_user_regex.search(line).group(1)
+                    player = clean_name(player_raw)
+                    print(f"JOIN (user): Raw='{player_raw}' | Cleaned='{player}'")
                     if player not in connected_players:
                         connected_players.add(player)
                         print(f"✅ Player added: {player}")
@@ -79,7 +87,7 @@ def send_update():
         "new_deaths": death_count,
         "status": "online",
         "script_version": SCRIPT_VERSION,
-        "gamemode": GAMEMODE  # ✅ New field added
+        "gamemode": GAMEMODE
     }
 
     try:
