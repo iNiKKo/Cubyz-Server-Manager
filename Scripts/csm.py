@@ -7,8 +7,9 @@ import os
 # === CONFIG ===
 LOG_PATH = "/home/minipc/Desktop/Cubyz/logs/latest.log"  # Path to your log file - CHANGE ME
 SERVER_ID = "ashframe"  # Server name - CHANGE ME
+GAMEMODE = "survival"  # Set game mode manually: "survival", "creative", etc.
 SCRIPT_VERSION = "1.1"  # Do not change
-CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update" # Do not change
+CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"  # Do not change
 SEND_INTERVAL = 10  # Seconds between updates
 # ==============
 
@@ -21,18 +22,10 @@ leave_regex = re.compile(r'\[info\]: Chat:\s+(.+?)\s+left')
 death_regex = re.compile(r'\[info\]: Chat: .*? died of fall damage')
 
 def clean_name(name):
-    # Remove section signs (e.g. §#ffff00)
     name = re.sub(r'§#(?:[0-9a-fA-F]{6})', '', name)
-
-    # Remove color codes like #ff9900
     name = re.sub(r'#(?:[0-9a-fA-F]{6})', '', name)
-
-    # Remove markdown formatting: **bold**, __underline__, ~~strike~~
     name = re.sub(r'(\*\*|__|~~)', '', name)
-
-    # Remove any non-letter characters except underscores and Cyrillic/Unicode letters
     name = re.sub(r'[^\w\u0400-\u04FF]', '', name)
-
     return name.strip()
 
 def follow_log():
@@ -41,14 +34,13 @@ def follow_log():
 
     try:
         with open(LOG_PATH, "r", encoding="utf-8") as f:
-            f.seek(0, os.SEEK_END)  # Go to end of file, ignore previous log
+            f.seek(0, os.SEEK_END)
             while True:
                 line = f.readline()
                 if not line:
                     time.sleep(0.1)
                     continue
 
-                # JOIN
                 if join_regex.search(line):
                     player_raw = join_regex.search(line).group(1)
                     player = clean_name(player_raw)
@@ -59,7 +51,6 @@ def follow_log():
                     else:
                         print(f"⚠️ Player already in connected list: {player}")
 
-                # LEAVE
                 elif leave_regex.search(line):
                     player_raw = leave_regex.search(line).group(1)
                     player = clean_name(player_raw)
@@ -70,15 +61,9 @@ def follow_log():
                     else:
                         print(f"⚠️ Player not found in connected list: {player}")
 
-                # DEATH
                 elif death_regex.search(line):
                     death_count += 1
                     print(f"☠️ DEATH DETECTED | Total deaths: {death_count}")
-
-                # UNMATCHED
-                else:
-                    pass
-                    # print(f"Unmatched line: {line.strip()}")
 
     except FileNotFoundError:
         print(f"❌ Log file not found: {LOG_PATH}")
@@ -93,7 +78,8 @@ def send_update():
         "players": list(connected_players),
         "new_deaths": death_count,
         "status": "online",
-        "script_version": SCRIPT_VERSION
+        "script_version": SCRIPT_VERSION,
+        "gamemode": GAMEMODE  # ✅ New field added
     }
 
     try:
@@ -111,6 +97,7 @@ def periodic_send():
 
 if __name__ == "__main__":
     print("Starting Cubyz Manager...")
+    print("Gamemode:", GAMEMODE)
     print("Waiting for players to join...")
 
     Thread(target=follow_log, daemon=True).start()
