@@ -51,7 +51,7 @@ async function fetchServerData() {
   } catch (err) {
     const container = document.getElementById('servers-container');
     container.classList.add('error');
-    container.textContent = 'Error fetching server data.';
+    container.textContent = 'Server list is currently offline, please contact iNiKko';
     console.error(err);
   }
 }
