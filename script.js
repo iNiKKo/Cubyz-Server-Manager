@@ -26,25 +26,40 @@ async function fetchServerData() {
 
       const secondsSinceUpdate = now - (info.timestamp || 0);
       const isOffline = secondsSinceUpdate > 15;
+      const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
 
       const playersList = info.players?.length > 0
         ? info.players.join(', ')
         : 'No players online';
 
-      const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
+      const ip = info.ip; 
+      const iconURL = info.icon || "https://cdn-icons-png.flaticon.com/512/10091/10091152.png";
 
-      let statusHTML = `<span class="${isOffline ? 'offline' : 'online'}">(${isOffline ? 'Offline' : 'Online'})</span>`;
-      if (!isOffline && isOutdated) {
-        statusHTML += ` <span class="outdated">(Needs Script Update)</span>`;
-      }
-
+      
       div.innerHTML = `
-        <h2>${serverId} ${statusHTML}</h2>
+        <img class="server-icon" src="${iconURL}" alt="Server Icon" />
+        <h2>${serverId}
+          <span class="status-badge ${isOffline ? 'offline' : 'online'}">${isOffline ? 'Offline' : 'Online'}</span>
+          ${!isOffline && isOutdated ? '<span class="status-badge outdated">Outdated</span>' : ''}
+        </h2>
+        ${ip ? `<p><strong>IP:</strong> <span class="server-ip">${ip}</span></p>` : ''}
         <p><strong>Gamemode:</strong> ${info.gamemode ?? 'Unknown'}</p>
         <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
         <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
         <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
       `;
+
+      
+      if (ip) {
+        div.title = `Click to copy IP: ${ip}`;
+        div.style.cursor = "pointer";
+        div.addEventListener("click", () => {
+          navigator.clipboard.writeText(ip).then(() => {
+            div.classList.add("copied");
+            setTimeout(() => div.classList.remove("copied"), 1000);
+          });
+        });
+      }
 
       container.appendChild(div);
     }

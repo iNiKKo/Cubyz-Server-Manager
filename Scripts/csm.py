@@ -4,8 +4,10 @@ from threading import Thread
 import requests
 import os
 
-LOG_PATH = "/home/minipc/Desktop/Cubyz/logs/latest.log"
-SERVER_ID = "ashframe"
+LOG_PATH = "/FULL/PATH/TO/LOGS/latest.log"
+SERVER_ID = "YOUR_SERVER_NAME_KEEP_IT_SHORT"
+SERVER_IP = "YOUR_SERVER_IP_ADDRESS"
+ICON_URL = "URL_FOR_ICON" 
 GAMEMODE = "survival"
 SCRIPT_VERSION = "1.1"
 CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"
@@ -45,9 +47,9 @@ def follow_log():
                     print(f"JOIN (chat): Raw='{player_raw}' | Cleaned='{player}'")
                     if player not in connected_players:
                         connected_players.add(player)
-                        print(f"✅ Player added: {player}")
+                        print(f"Player added: {player}")
                     else:
-                        print(f"⚠️ Player already in connected list: {player}")
+                        print(f"Player already in connected list: {player}")
 
                 elif join_user_regex.search(line):
                     player_raw = join_user_regex.search(line).group(1)
@@ -55,9 +57,9 @@ def follow_log():
                     print(f"JOIN (user): Raw='{player_raw}' | Cleaned='{player}'")
                     if player not in connected_players:
                         connected_players.add(player)
-                        print(f"✅ Player added: {player}")
+                        print(f"Player added: {player}")
                     else:
-                        print(f"⚠️ Player already in connected list: {player}")
+                        print(f"Player already in connected list: {player}")
 
                 elif leave_regex.search(line):
                     player_raw = leave_regex.search(line).group(1)
@@ -65,30 +67,33 @@ def follow_log():
                     print(f"LEAVE: Raw='{player_raw}' | Cleaned='{player}'")
                     if player in connected_players:
                         connected_players.discard(player)
-                        print(f"✅ Player removed: {player}")
+                        print(f"Player removed: {player}")
                     else:
-                        print(f"⚠️ Player not found in connected list: {player}")
+                        print(f"Player not found in connected list: {player}")
 
                 elif death_regex.search(line):
                     death_count += 1
                     print(f"☠️ DEATH DETECTED | Total deaths: {death_count}")
 
     except FileNotFoundError:
-        print(f"❌ Log file not found: {LOG_PATH}")
+        print(f"Log file not found: {LOG_PATH}")
     except Exception as e:
-        print(f"💥 Error following log: {e}")
+        print(f"Error following log: {e}")
 
 def send_update():
     global death_count
     data = {
-        "server_id": SERVER_ID,
-        "player_count": len(connected_players),
-        "players": list(connected_players),
-        "new_deaths": death_count,
-        "status": "online",
-        "script_version": SCRIPT_VERSION,
-        "gamemode": GAMEMODE
-    }
+    "server_id": SERVER_ID,
+    "player_count": len(connected_players),
+    "players": list(connected_players),
+    "new_deaths": death_count,
+    "status": "online",
+    "script_version": SCRIPT_VERSION,
+    "gamemode": GAMEMODE,        
+    "ip": SERVER_IP,             
+    "icon": ICON_URL 
+}
+
 
     try:
         print(f"📤 Sending update: {data}")
