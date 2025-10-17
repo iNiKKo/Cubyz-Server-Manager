@@ -3,16 +3,17 @@
 ---
 
 ## ⚙️ How it works  
-The **Python script** reads your server logs to track who **joined/left** or **died**.
-It also **removes symbols and color codes** from player names to keep it clean and readable.
+
+This Python script monitors your server logs to track player activity — including **joins**, **leaves**, and **deaths**.  
+It also **cleans up player names** by removing symbols and color codes for better readability.  
+Additionally, it keeps track of your **server IP** and **icon URL** to send data to a connected website.
+
 
 ---
 
 ## 📚 Tutorial
 
-> **Note:** This tutorial is based on **Debian Linux**
-
-## 🔧 Prerequisites
+## Prerequisites
 - `Python 3`
 - `requests`
 
@@ -33,19 +34,13 @@ pip3 install requests
    This should be the folder that contains `latest.log`.
 
 3. **Edit the script**
-   - Line `8`: Set the path to your `latest.log`  
+   - Change all of these. 
      Example:
      ```python
-     log_path = "/home/youruser/server/logs/latest.log"
-     ```
-   - Line `9`: Set a unique server ID  
-     Example:
-     ```python
-     SERVER_ID = "Your_Server_Name"
-     ```
-   - Line `10`: Set your server Gamemode  
-     Example:
-     ```python
+     LOG_PATH = "/FULL/PATH/TO/LOGS/latest.log"
+     SERVER_ID = "YOUR_SERVER_NAME_KEEP_IT_SHORT"
+     SERVER_IP = "YOUR_SERVER_IP_ADDRESS"
+     ICON_URL = "URL_FOR_ICON" 
      GAMEMODE = "survival"
      ```
 
@@ -53,5 +48,5 @@ pip3 install requests
 ```bash
 python3 csm.py
 ```
-> **Note:** You MUST run the script BEFORE the server, when rebooting stop the script and run before server.
+> **Note:** You **must** launch the game **first**, then run `csm.py`, and only **after that**, open your server.
 ---
