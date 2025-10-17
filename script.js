@@ -1,5 +1,5 @@
 const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
-const CURRENT_SCRIPT_VERSION = '1.1';
+const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
   try {

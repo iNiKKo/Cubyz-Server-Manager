@@ -9,7 +9,7 @@ SERVER_ID = "YOUR_SERVER_NAME_KEEP_IT_SHORT"
 SERVER_IP = "YOUR_SERVER_IP_ADDRESS"
 ICON_URL = "URL_FOR_ICON" 
 GAMEMODE = "survival"
-SCRIPT_VERSION = "1.1"
+SCRIPT_VERSION = "1.2"
 CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"
 SEND_INTERVAL = 10
 
