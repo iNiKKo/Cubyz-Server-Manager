@@ -73,7 +73,7 @@ def follow_log():
 
                 elif death_regex.search(line):
                     death_count += 1
-                    print(f"☠️ DEATH DETECTED | Total deaths: {death_count}")
+                    print(f"DEATH DETECTED | Total deaths: {death_count}")
 
     except FileNotFoundError:
         print(f"Log file not found: {LOG_PATH}")
@@ -96,12 +96,12 @@ def send_update():
 
 
     try:
-        print(f"📤 Sending update: {data}")
+        print(f"Sending update: {data}")
         requests.post(CENTRAL_URL, json=data)
-        print("✅ Update sent successfully.")
+        print("Update sent successfully.")
         death_count = 0
     except Exception as e:
-        print(f"❌ Failed to send update: {e}")
+        print(f"Failed to send update: {e}")
 
 def periodic_send():
     while True:
