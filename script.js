@@ -1,4 +1,4 @@
-const API_URL = 'https://central.ashframe.net/update';
+const API_URL = 'http://api.ashframe.net/update';
 const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
