@@ -1,4 +1,4 @@
-const API_URL = 'https://api.ashframe.net/update';
+const API_URL = 'https://social-jokes-trade.loca.lt/update';
 const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
