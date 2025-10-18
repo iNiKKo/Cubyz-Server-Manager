@@ -1,4 +1,4 @@
-const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
+const API_URL = 'http://api.ashframe.net:5000/update';
 const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
