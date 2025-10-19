@@ -41,24 +41,39 @@ async function fetchServerData() {
         ? info.players.join(', ')
         : 'No players online';
 
-      const ip = info.ip;
+      const ip = info.ip; 
       const iconURL = info.icon || "https://cdn-icons-png.flaticon.com/512/10091/10091152.png";
 
+<<<<<<< HEAD
       div.innerHTML = `
         <div class="server-icon-wrapper">
           <img class="server-icon" src="${iconURL}" alt="Server Icon" />
         </div>
+=======
+      
+      div.innerHTML = `
+        <img class="server-icon" src="${iconURL}" alt="Server Icon" />
+>>>>>>> parent of 5d017fb (Visual Adjustment)
         <h2>${serverId}
           <span class="status-badge ${isOffline ? 'offline' : 'online'}">${isOffline ? 'Offline' : 'Online'}</span>
           ${!isOffline && isOutdated ? '<span class="status-badge outdated">Outdated</span>' : ''}
         </h2>
+<<<<<<< HEAD
         ${ip ? `<p><span class="label">IP:</span> <span class="value server-ip">${ip}</span></p>` : ''}
         <p><span class="label">Gamemode:</span> <span class="value">${info.gamemode ?? 'Unknown'}</span></p>
         <p><span class="label">Players online:</span> <span class="value">${isOffline ? '0' : info.player_count}</span></p>
         <p><span class="label">Players:</span> <span class="value">${isOffline ? 'N/A' : playersList}</span></p>
         <p><span class="label">Deaths:</span> <span class="value">${info.death_count ?? 0}</span></p>
+=======
+        ${ip ? `<p><strong>IP:</strong> <span class="server-ip">${ip}</span></p>` : ''}
+        <p><strong>Gamemode:</strong> ${info.gamemode ?? 'Unknown'}</p>
+        <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
+        <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
+        <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
+>>>>>>> parent of 5d017fb (Visual Adjustment)
       `;
 
+      
       if (ip) {
         div.title = `Click to copy IP: ${ip}`;
         div.style.cursor = "pointer";
