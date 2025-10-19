@@ -1,4 +1,4 @@
-const API_URL = 'https://dfheicnehv.a.pinggy.link/update';  
+const API_URL = 'http://dfheicnehv.a.pinggy.link/update';  
 const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
