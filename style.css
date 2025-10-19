@@ -9,24 +9,35 @@ body {
   color: #f0f0f0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
-  justify-content: center;
-  align-items: start;
-  min-height: 100vh;
+  justify-content: center; /* Horizontally center the container */
+  align-items: center; /* Vertically center the container */
+  min-height: 100vh; /* Ensure the body fills the viewport height */
   padding: 40px 20px;
+  overflow-x: hidden;
+  background-image: url('temp_background.png'); /* Set background image directly on body */
+  background-size: cover;
+  background-position: center;
 }
 
 .container {
-  background-color: #1c1f26;
+  background-color: rgba(28, 31, 38, 0.9); /* Slight transparency for the background */
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  max-width: 900px;
   width: 100%;
+  max-width: 900px; /* Max width for the container */
+  height: 100vh; /* Fill the full height of the viewport */
+  display: flex;
+  flex-direction: column; /* Allow the content to stack vertically */
+  justify-content: flex-start; /* Align content from top to bottom */
+  padding-top: 40px; /* Add padding at the top of the container to prevent cards being stuck to the roof */
 }
 
 h1 {
+  font-family: 'Quicksand', sans-serif;
+  text-shadow: 1px 1px 1px rgb(24, 245, 79);
   font-size: 2.2rem;
-  color: #82aaff;
+  color: #5cd376;
   text-align: center;
   margin-bottom: 30px;
 }
@@ -36,17 +47,26 @@ h1 {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  flex-grow: 1; /* Allow this section to take up available space */
+  overflow-y: auto; /* Add vertical scroll if needed */
 }
 
 .server {
   background-color: #2c2f36;
   border: 1px solid #333;
-  padding: 20px;
+  padding: 15px;
   border-radius: 12px;
-  width: 260px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease;
+  width: 265px;
+  height: 320px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Default shadow */
+  transition: box-shadow 0.3s ease-in-out; /* Transition for box-shadow only */
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: visible; /* Ensure the shadow is visible */
+  z-index: 1;
+  margin-top: 30px; /* Add margin between cards and top */
 }
 
 .server:hover {
@@ -67,7 +87,7 @@ h1 {
 .server-icon {
   width: 100%;
   height: 120px;
-  object-fit: cover;
+  object-fit: fill;
   border-radius: 8px;
   margin-bottom: 12px;
 }
@@ -109,9 +129,10 @@ h1 {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
+
 .server.copied {
-  box-shadow: 0 0 20px rgba(130, 170, 255, 0.6);
-  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(58, 199, 77, 0.8); /* Larger, more prominent glow */
+  z-index: 10; /* Ensure it's above other content */
 }
 
 .server::after {
@@ -120,7 +141,7 @@ h1 {
   bottom: 10px;
   right: 12px;
   font-size: 0.75rem;
-  color: #82aaff;
+  color: #a5ff82;
   opacity: 0;
   transition: opacity 0.2s;
   pointer-events: none;
@@ -128,4 +149,28 @@ h1 {
 
 .server.copied::after {
   opacity: 1;
+}
+
+/* Flexbox adjustments for responsive grid */
+@media (min-width: 768px) {
+  #servers-container {
+    justify-content: space-evenly; /* Evenly space the cards in a row */
+  }
+}
+
+@media (max-width: 767px) {
+  #servers-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .server {
+    width: 100%;
+  }
+}
+.refresh-time {
+  font-size: 1rem;
+  color: #b0b0b0;
+  text-align: center; /* Center the text */
+  margin-top: -20px;
 }

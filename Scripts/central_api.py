@@ -28,7 +28,6 @@ def update():
 
     server_data[server_id] = {
         "player_count": data.get("player_count", 0),
-        "players": data.get("players", []),
         "death_count": total_deaths,
         "status": data.get("status", "online"),
         "script_version": data.get("script_version", "unknown"),

@@ -1,5 +1,5 @@
 const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
-const CURRENT_SCRIPT_VERSION = '1.2';
+const CURRENT_SCRIPT_VERSION = '1.3';
 
 async function fetchServerData() {
   try {
@@ -25,7 +25,7 @@ async function fetchServerData() {
       div.classList.add('server');
 
       const secondsSinceUpdate = now - (info.timestamp || 0);
-      const isOffline = info.status === "offline";  // Check the server status directly
+      const isOffline = info.status === "offline";
       const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
 
       const playersList = info.players?.length > 0
@@ -44,8 +44,7 @@ async function fetchServerData() {
         ${ip ? `<p><strong>IP:</strong> <span class="server-ip">${ip}</span></p>` : ''}
         <p><strong>Gamemode:</strong> ${info.gamemode ?? 'Unknown'}</p>
         <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
-        <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
-        <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
+        <p><strong>Total Deaths:</strong> ${info.death_count ?? 0}</p>
       `;
 
       if (ip) {

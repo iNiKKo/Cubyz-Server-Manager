@@ -9,9 +9,9 @@ SERVER_ID = "YOUR_SERVER_NAME_KEEP_IT_SHORT"
 SERVER_IP = "YOUR_SERVER_IP_ADDRESS"
 ICON_URL = "URL_FOR_ICON" 
 GAMEMODE = "survival"
-SCRIPT_VERSION = "1.2"
+SCRIPT_VERSION = "1.3"
 CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"
-SEND_INTERVAL = 10
+SEND_INTERVAL = 60
 
 connected_players = set()
 death_count = 0
@@ -73,7 +73,7 @@ def follow_log():
 
                 elif death_regex.search(line):
                     death_count += 1
-                    print(f"☠️ DEATH DETECTED | Total deaths: {death_count}")
+                    print(f"DEATH DETECTED | Total deaths: {death_count}")
 
     except FileNotFoundError:
         print(f"Log file not found: {LOG_PATH}")
@@ -96,12 +96,12 @@ def send_update():
 
 
     try:
-        print(f"📤 Sending update: {data}")
+        print(f"Sending update: {data}")
         requests.post(CENTRAL_URL, json=data)
-        print("✅ Update sent successfully.")
+        print("Update sent successfully.")
         death_count = 0
     except Exception as e:
-        print(f"❌ Failed to send update: {e}")
+        print(f"Failed to send update: {e}")
 
 def periodic_send():
     while True:
