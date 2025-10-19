@@ -1,9 +1,22 @@
-const API_URL = 'https://xxhpy-86-186-154-214.a.free.pinggy.link/update';
+const API_URL = 'https://xxhpy-86-186-154-214.a.free.pinggy.link/update';  
 const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
   try {
-    const response = await fetch(API_URL); 
+    const response = await fetch(API_URL, {
+      method: 'POST',  // Use POST method
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        
+        server_id: 'Ashframe',
+        player_count: 10,  
+        players: ['Player1', 'Player2'],  
+        new_deaths: 3,  
+      }),
+    });
+
     if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
     const servers = await response.json();
