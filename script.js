@@ -25,7 +25,7 @@ async function fetchServerData() {
       div.classList.add('server');
 
       const secondsSinceUpdate = now - (info.timestamp || 0);
-      const isOffline = secondsSinceUpdate > 15;
+      const isOffline = info.status === "offline";  // Check the server status directly
       const isOutdated = !info.script_version || info.script_version !== CURRENT_SCRIPT_VERSION;
 
       const playersList = info.players?.length > 0
@@ -35,7 +35,6 @@ async function fetchServerData() {
       const ip = info.ip; 
       const iconURL = info.icon || "https://cdn-icons-png.flaticon.com/512/10091/10091152.png";
 
-      
       div.innerHTML = `
         <img class="server-icon" src="${iconURL}" alt="Server Icon" />
         <h2>${serverId}
@@ -49,7 +48,6 @@ async function fetchServerData() {
         <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
       `;
 
-      
       if (ip) {
         div.title = `Click to copy IP: ${ip}`;
         div.style.cursor = "pointer";
