@@ -1,12 +1,11 @@
-const API_URL = 'http://dfheicnehv.a.pinggy.link/update';  
+const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev /update';  
 
 async function fetchServerData() {
   try {
     const response = await fetch(API_URL, {
       method: 'POST',  // Use POST method
       headers: {
-        'Content-Type': 'application/json',
-        'X-Pinggy-No-Screen': 'AvoidTheProblem',  
+        'Content-Type': 'application/json', 
       },
       body: JSON.stringify({
         server_id: 'Ashframe',
