@@ -1,5 +1,4 @@
 const API_URL = 'http://dfheicnehv.a.pinggy.link/update';  
-const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
   try {
@@ -7,13 +6,13 @@ async function fetchServerData() {
       method: 'POST',  // Use POST method
       headers: {
         'Content-Type': 'application/json',
+        'X-Pinggy-No-Screen': 'AvoidTheProblem',  
       },
       body: JSON.stringify({
-        
         server_id: 'Ashframe',
-        player_count: 10,  
-        players: ['Player1', 'Player2'],  
-        new_deaths: 3,  
+        player_count: 10,
+        players: ['Player1', 'Player2'],
+        new_deaths: 3,
       }),
     });
 
