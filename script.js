@@ -1,4 +1,4 @@
-const API_URL = 'https://hrxnm-2a00-23c7-82f5-5101--be9.a.free.pinggy.link/update';
+const API_URL = ' https://xxhpy-86-186-154-214.a.free.pinggy.link/update';
 const CURRENT_SCRIPT_VERSION = '1.2';
 
 async function fetchServerData() {
