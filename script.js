@@ -1,25 +1,11 @@
-<<<<<<< Updated upstream
-const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/update';  
-=======
-const API_URL = 'http://api.ashframe.net/update';
+const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/servers.json';
 const CURRENT_SCRIPT_VERSION = '1.2';
->>>>>>> Stashed changes
 
 async function fetchServerData() {
   try {
     const response = await fetch(API_URL, {
-      method: 'POST',  // Use POST method
-      headers: {
-        'Content-Type': 'application/json', 
-      },
-      body: JSON.stringify({
-        server_id: 'Ashframe',
-        player_count: 10,
-        players: ['Player1', 'Player2'],
-        new_deaths: 3,
-      }),
+      headers: { 'ngrok-skip-browser-warning': 'true' }
     });
-
     if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
     const servers = await response.json();
@@ -49,33 +35,18 @@ async function fetchServerData() {
       const ip = info.ip; 
       const iconURL = info.icon || "https://cdn-icons-png.flaticon.com/512/10091/10091152.png";
 
-<<<<<<< HEAD
-      div.innerHTML = `
-        <div class="server-icon-wrapper">
-          <img class="server-icon" src="${iconURL}" alt="Server Icon" />
-        </div>
-=======
       
       div.innerHTML = `
         <img class="server-icon" src="${iconURL}" alt="Server Icon" />
->>>>>>> parent of 5d017fb (Visual Adjustment)
         <h2>${serverId}
           <span class="status-badge ${isOffline ? 'offline' : 'online'}">${isOffline ? 'Offline' : 'Online'}</span>
           ${!isOffline && isOutdated ? '<span class="status-badge outdated">Outdated</span>' : ''}
         </h2>
-<<<<<<< HEAD
-        ${ip ? `<p><span class="label">IP:</span> <span class="value server-ip">${ip}</span></p>` : ''}
-        <p><span class="label">Gamemode:</span> <span class="value">${info.gamemode ?? 'Unknown'}</span></p>
-        <p><span class="label">Players online:</span> <span class="value">${isOffline ? '0' : info.player_count}</span></p>
-        <p><span class="label">Players:</span> <span class="value">${isOffline ? 'N/A' : playersList}</span></p>
-        <p><span class="label">Deaths:</span> <span class="value">${info.death_count ?? 0}</span></p>
-=======
         ${ip ? `<p><strong>IP:</strong> <span class="server-ip">${ip}</span></p>` : ''}
         <p><strong>Gamemode:</strong> ${info.gamemode ?? 'Unknown'}</p>
         <p><strong>Players online:</strong> ${isOffline ? '0' : info.player_count}</p>
         <p><strong>Players:</strong> ${isOffline ? 'N/A' : playersList}</p>
         <p><strong>Deaths (fall):</strong> ${info.death_count ?? 0}</p>
->>>>>>> parent of 5d017fb (Visual Adjustment)
       `;
 
       
