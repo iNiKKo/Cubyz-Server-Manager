@@ -1,4 +1,4 @@
-const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev /update';  
+const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/update';  
 
 async function fetchServerData() {
   try {
