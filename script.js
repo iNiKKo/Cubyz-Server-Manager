@@ -70,4 +70,4 @@ async function fetchServerData() {
 }
 
 fetchServerData();
-setInterval(fetchServerData, 10000);
+setInterval(fetchServerData, 60000);
