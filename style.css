@@ -6,13 +6,17 @@
 
 body {
   background-color: #0f1117;
-  color: #f0f0f0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: start;
+  background-image: url('bg3.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  /* Remove flex styles to avoid vertical centering */
+  display: block;
   min-height: 100vh;
-  padding: 40px 20px;
+  padding: 0; /* remove padding here */
+  
+  margin: 0;
 }
 
 .container {
@@ -20,8 +24,19 @@ body {
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  max-width: 900px;
-  width: 100%;
+  
+  max-width: 900px;  /* fixed width */
+  width: 900px;      /* make sure width doesn't shrink */
+  
+  /* Center horizontally */
+  margin: 0 auto;
+  
+  /* Stretch vertically if needed */
+  min-height: 100vh;
+  
+  /* optional: add vertical padding */
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 h1 {

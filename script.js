@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 const API_URL = 'https://semiacademic-loni-unseducibly.ngrok-free.dev/update';  
+=======
+const API_URL = 'http://api.ashframe.net/update';
+const CURRENT_SCRIPT_VERSION = '1.2';
+>>>>>>> Stashed changes
 
 async function fetchServerData() {
   try {
