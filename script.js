@@ -3,9 +3,11 @@ const CURRENT_SCRIPT_VERSION = '1.3';
 
 async function fetchServerData() {
   try {
+    console.log("Fetching server data...");  // Log when data is fetched
     const response = await fetch(API_URL, {
       headers: { 'ngrok-skip-browser-warning': 'true' }
     });
+
     if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
     const servers = await response.json();
@@ -32,7 +34,7 @@ async function fetchServerData() {
         ? info.players.join(', ')
         : 'No players online';
 
-      const ip = info.ip; 
+      const ip = info.ip;
       const iconURL = info.icon || "https://cdn-icons-png.flaticon.com/512/10091/10091152.png";
 
       div.innerHTML = `
@@ -68,5 +70,6 @@ async function fetchServerData() {
   }
 }
 
+// Fetch data initially and then every 60 seconds
 fetchServerData();
 setInterval(fetchServerData, 60000);
