@@ -13,6 +13,7 @@ ICON_URL = "https://i.postimg.cc/7PzpSzKm/Snail.png"  # BANNER / ICON FOR YOUR C
 GAMEMODE = "survival"  # YOUR GAMEMODE
 SCRIPT_VERSION = "1.3"
 SEND_INTERVAL = 60
+SPAWN_CLEAN_NAME = "SPAWN"  # Special user name that triggers "online" status currently doesnt work.
 
 
 CENTRAL_API_IP = "api.ashframe.net" #new api that uses tcp not http
