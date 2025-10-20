@@ -1,30 +1,39 @@
 import time
 import re
 from threading import Thread
-import requests
+import socket
+import json
 import os
 
-LOG_PATH = "/home/minipc/Desktop/cubyz_auth_server/logs/latest.log" #PATH TO YOUR LOGS
-SERVER_ID = "Ashframe" #SERVER NAME KEEP IT UNDER 2 WORDS
-SERVER_IP = "cb.ashframe.net" #YOUR SERVER IP
-ICON_URL = "https://i.postimg.cc/7PzpSzKm/Snail.png" #BANNER / ICON FOR YOUR CARD (on the website)
-GAMEMODE = "survival" #YOUR GAMEMODE
+# Configurable variables
+LOG_PATH = "/home/minipc/Desktop/cubyz_auth_server/logs/latest.log"  # PATH TO YOUR LOGS
+SERVER_ID = "Ashframe"  # SERVER NAME KEEP IT UNDER 2 WORDS
+SERVER_IP = "cb.ashframe.net"  # YOUR SERVER IP
+ICON_URL = "https://i.postimg.cc/7PzpSzKm/Snail.png"  # BANNER / ICON FOR YOUR CARD (on the website)
+GAMEMODE = "survival"  # YOUR GAMEMODE
 SCRIPT_VERSION = "1.3"
-CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"
 SEND_INTERVAL = 60
+
+
+CENTRAL_API_IP = "api.ashframe.net" #new api that uses tcp not http
+CENTRAL_API_PORT = 5001
+
 
 connected_players = set()
 death_count = 0
-server_status = "offline"
+server_status = "online"
+
 
 join_chat_regex = re.compile(r'\[info\]: Chat:\s+(.*?)\s+joined', re.IGNORECASE)
 join_user_regex = re.compile(r'\[info\]: User\s+(.*?)\s+joined using version', re.IGNORECASE)
 leave_regex = re.compile(r'\[info\]: Chat:\s+(.+?)\s+left', re.IGNORECASE)
 death_regex = re.compile(r'\[info\]: Chat: .*? died', re.IGNORECASE)
 
-SPAWN_CLEAN_NAME = "SPAWN"
+
+info_port_regex = re.compile(r'^\[info\]:\s+.*?:(\d{1,5})$', re.IGNORECASE)
 
 def clean_name(name):
+
     name = re.sub(r'§#(?:[0-9a-fA-F]{6})', '', name)
     name = re.sub(r'#(?:[0-9a-fA-F]{6})', '', name)
     name = re.sub(r'(\*\*|__|~~)', '', name)
@@ -32,6 +41,7 @@ def clean_name(name):
     return name.strip()
 
 def update_status():
+
     global server_status
     spawn_present = SPAWN_CLEAN_NAME in connected_players
     new_status = "online" if spawn_present else "offline"
@@ -42,6 +52,7 @@ def update_status():
         send_update()
 
 def follow_log():
+
     global connected_players, death_count
     print("Watching log for new activity...")
 
@@ -53,6 +64,7 @@ def follow_log():
                 if not line:
                     time.sleep(0.1)
                     continue
+
 
                 if join_chat_regex.search(line):
                     player_raw = join_chat_regex.search(line).group(1)
@@ -76,6 +88,7 @@ def follow_log():
                     else:
                         print(f"Player already in connected list: {player}")
 
+
                 elif leave_regex.search(line):
                     player_raw = leave_regex.search(line).group(1)
                     player = clean_name(player_raw)
@@ -87,9 +100,19 @@ def follow_log():
                     else:
                         print(f"Player not found in connected list: {player}")
 
+
                 elif death_regex.search(line):
                     death_count += 1
                     print(f"DEATH DETECTED | Total deaths: {death_count}")
+
+
+                elif info_port_regex.search(line):
+
+                    port = info_port_regex.search(line).group(1)
+                    print(f"Server started with port: {port}")
+
+                    server_status = "online"
+                    send_update()
 
     except FileNotFoundError:
         print(f"Log file not found: {LOG_PATH}")
@@ -97,6 +120,7 @@ def follow_log():
         print(f"Error following log: {e}")
 
 def send_update():
+
     global death_count, server_status
     data = {
         "server_id": SERVER_ID,
@@ -111,15 +135,22 @@ def send_update():
         "timestamp": int(time.time())
     }
 
+
+    data_string = json.dumps(data)
+
     try:
-        print(f"Sending update ({server_status.upper()}): {data}")
-        requests.post(CENTRAL_URL, json=data)
-        print("Update sent successfully.")
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((CENTRAL_API_IP, CENTRAL_API_PORT))
+            s.sendall(data_string.encode('utf-8'))
+
+        print(f"Sent update: {data}")
         death_count = 0
+
     except Exception as e:
         print(f"Failed to send update: {e}")
 
 def periodic_send():
+
     while True:
         send_update()
         time.sleep(SEND_INTERVAL)
@@ -128,6 +159,7 @@ if __name__ == "__main__":
     print("Starting Cubyz Manager...")
     print("Gamemode:", GAMEMODE)
     print("Waiting for players to join...")
+
 
     Thread(target=follow_log, daemon=True).start()
     Thread(target=periodic_send, daemon=True).start()
