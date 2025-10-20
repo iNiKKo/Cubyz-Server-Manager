@@ -4,22 +4,25 @@ from threading import Thread
 import requests
 import os
 
-LOG_PATH = "/FULL/PATH/TO/LOGS/latest.log"
-SERVER_ID = "YOUR_SERVER_NAME_KEEP_IT_SHORT"
-SERVER_IP = "YOUR_SERVER_IP_ADDRESS"
-ICON_URL = "URL_FOR_ICON" 
-GAMEMODE = "survival"
+LOG_PATH = "/home/minipc/Desktop/cubyz_auth_server/logs/latest.log" #PATH TO YOUR LOGS
+SERVER_ID = "Ashframe" #SERVER NAME KEEP IT UNDER 2 WORDS
+SERVER_IP = "cb.ashframe.net" #YOUR SERVER IP
+ICON_URL = "https://i.postimg.cc/7PzpSzKm/Snail.png" #BANNER / ICON FOR YOUR CARD (on the website)
+GAMEMODE = "survival" #YOUR GAMEMODE
 SCRIPT_VERSION = "1.3"
 CENTRAL_URL = "https://semiacademic-loni-unseducibly.ngrok-free.dev/update"
 SEND_INTERVAL = 60
 
 connected_players = set()
 death_count = 0
+server_status = "offline"
 
 join_chat_regex = re.compile(r'\[info\]: Chat:\s+(.*?)\s+joined', re.IGNORECASE)
 join_user_regex = re.compile(r'\[info\]: User\s+(.*?)\s+joined using version', re.IGNORECASE)
 leave_regex = re.compile(r'\[info\]: Chat:\s+(.+?)\s+left', re.IGNORECASE)
-death_regex = re.compile(r'\[info\]: Chat: .*? died of fall damage', re.IGNORECASE)
+death_regex = re.compile(r'\[info\]: Chat: .*? died', re.IGNORECASE)
+
+SPAWN_CLEAN_NAME = "SPAWN"
 
 def clean_name(name):
     name = re.sub(r'§#(?:[0-9a-fA-F]{6})', '', name)
@@ -27,6 +30,16 @@ def clean_name(name):
     name = re.sub(r'(\*\*|__|~~)', '', name)
     name = re.sub(r'[^\w\u0400-\u04FF]', '', name)
     return name.strip()
+
+def update_status():
+    global server_status
+    spawn_present = SPAWN_CLEAN_NAME in connected_players
+    new_status = "online" if spawn_present else "offline"
+
+    if new_status != server_status:
+        server_status = new_status
+        print(f"Server status changed to: {server_status.upper()}")
+        send_update()
 
 def follow_log():
     global connected_players, death_count
@@ -48,6 +61,7 @@ def follow_log():
                     if player not in connected_players:
                         connected_players.add(player)
                         print(f"Player added: {player}")
+                        update_status()
                     else:
                         print(f"Player already in connected list: {player}")
 
@@ -58,6 +72,7 @@ def follow_log():
                     if player not in connected_players:
                         connected_players.add(player)
                         print(f"Player added: {player}")
+                        update_status()
                     else:
                         print(f"Player already in connected list: {player}")
 
@@ -68,6 +83,7 @@ def follow_log():
                     if player in connected_players:
                         connected_players.discard(player)
                         print(f"Player removed: {player}")
+                        update_status()
                     else:
                         print(f"Player not found in connected list: {player}")
 
@@ -81,22 +97,22 @@ def follow_log():
         print(f"Error following log: {e}")
 
 def send_update():
-    global death_count
+    global death_count, server_status
     data = {
-    "server_id": SERVER_ID,
-    "player_count": len(connected_players),
-    "players": list(connected_players),
-    "new_deaths": death_count,
-    "status": "online",
-    "script_version": SCRIPT_VERSION,
-    "gamemode": GAMEMODE,        
-    "ip": SERVER_IP,             
-    "icon": ICON_URL 
-}
-
+        "server_id": SERVER_ID,
+        "players": list(connected_players),
+        "player_count": len(connected_players),
+        "new_deaths": death_count,
+        "status": server_status,
+        "script_version": SCRIPT_VERSION,
+        "gamemode": GAMEMODE,
+        "ip": SERVER_IP,
+        "icon": ICON_URL,
+        "timestamp": int(time.time())
+    }
 
     try:
-        print(f"Sending update: {data}")
+        print(f"Sending update ({server_status.upper()}): {data}")
         requests.post(CENTRAL_URL, json=data)
         print("Update sent successfully.")
         death_count = 0
